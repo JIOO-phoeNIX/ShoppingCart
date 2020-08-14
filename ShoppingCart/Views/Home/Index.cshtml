@@ -1,0 +1,73 @@
+﻿@model ShoppingCart.Models.HomeIndexViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<br />
+<br />
+
+<div>
+    <div>
+        <table class="table table-responsive table-bordered">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Quantity</td>
+                    <td>Price</td>
+                    <td>Subtotal</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var cartLine in Model.Cart.Lines)
+                {
+                    <tr>
+                        <td>@cartLine.Product.Name</td>
+                        <td>@cartLine.Quantity</td>
+                        <td>@cartLine.Product.Price.ToString("c")</td>
+                        <td>@((cartLine.Quantity * cartLine.Product.Price).ToString("c"))</td>
+                        @using (Html.BeginForm("DeleteFromCart", "Home", FormMethod.Post))
+                        { 
+                            @Html.Partial("ProductFormData", cartLine.Product)
+                            <td><input type="submit" class="btn btn-danger" value="Delete" /></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-right">Total:</td>
+                    <td class="text-right">
+                        @Model.Cart.ComputeTotalValue().ToString("c")
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <br /><br /><br />
+    <div>
+        <h3>All Categories</h3>
+        <table class="table table-responsive table-bordered">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var category in Model.Categories)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(category.Name, "Products", new { id = category.CategoryId })</td>
+                        <td>@category.Description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

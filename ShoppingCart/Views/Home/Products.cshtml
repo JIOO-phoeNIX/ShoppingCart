@@ -1,0 +1,46 @@
+﻿@model ShoppingCart.Models.HomeProductsViewModel
+
+@{
+    ViewBag.Title = "Products";
+}
+
+<h2>@Model.Category.Name Products</h2>
+
+<br />
+<br />
+
+<div>
+    <div>
+        <table class="table table-responsive table-bordered">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Description</td>
+                    <td>Price</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post))
+                        {
+                           @Html.Partial("ProductFormData", product)                                                                             
+                            <td>@product.Name</td>
+                            <td>@product.Description</td>
+                            <td>@product.Price.ToString("c")</td>
+                            <td>
+                                <input type="submit" class="btn btn-success" value="Add to cart" />
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @Html.ActionLink("Back to list", "Index")
+</div>
+
